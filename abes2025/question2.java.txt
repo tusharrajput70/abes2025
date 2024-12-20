@@ -1,0 +1,62 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Main {
+
+    public static boolean isPrime(int num) {
+        if (num <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static List<Integer> rearrangeArray(int[] arr) {
+        List<Integer> primes = new ArrayList<>();
+        List<Integer> nonPrimes = new ArrayList<>();
+
+        for (int num : arr) {
+            if (isPrime(num)) {
+                primes.add(num);
+            } else {
+                nonPrimes.add(num);
+            }
+        }
+
+        if (primes.isEmpty()) {
+            List<Integer> result = new ArrayList<>();
+            for (int num : arr) {
+                result.add(num);
+            }
+            result.sort(Collections.reverseOrder());
+            return result;
+        }
+
+        int largestPrime = Collections.max(primes);
+        int smallestPrime = Collections.min(primes);
+
+        primes.remove(Integer.valueOf(largestPrime));
+        primes.remove(Integer.valueOf(smallestPrime));
+
+        List<Integer> middleElements = new ArrayList<>();
+        middleElements.addAll(nonPrimes);
+        middleElements.addAll(primes);
+        middleElements.sort(Collections.reverseOrder());
+
+        List<Integer> result = new ArrayList<>();
+        result.add(largestPrime);
+        result.addAll(middleElements);
+        result.add(smallestPrime);
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = {5, 1, 8, 11, 2};
+        System.out.println(rearrangeArray(arr1));
+
+        int[] arr2 = {1, 6, 4, 13, 9, 3};
+        System.out.println(rearrangeArray(arr2));
+    }
+}
